@@ -4,7 +4,18 @@ namespace TaskTrackerMVC.Views;
 
 public class TaskView
 {
-   
+    public void DisplayTasks(List<TaskItem> tasks)
+    {
+        Console.Clear();
+        Console.WriteLine("=== TASK TRACKER ===");
+        if (tasks.Count == 0) Console.WriteLine("No tasks yet.");
+
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"{task.Id}. [{task.Status}] {task.Title}");
+        }
+        Console.WriteLine("====================\n");
+    }
 
     public string GetUserChoice()
     {
