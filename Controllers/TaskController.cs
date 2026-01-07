@@ -7,18 +7,33 @@ public class TaskController
 {
     private List<TaskItem> _tasks = new();
     private TaskView _view = new();
+    private int _nextId = 1;
 
     public void Run()
     {
-        bool running = true;
-        while (running)
+        while (true)
         {
             _view.DisplayTasks(_tasks);
-            string title = _view.GetTaskInput();
-            
-            if (title.ToLower() == "exit") break;
+            string choice = _view.GetUserChoice();
 
-            _tasks.Add(new TaskItem { Id = _tasks.Count + 1, Title = title });
+            if (choice == "exit") break;
+
+            switch (choice)
+            {
+                case "add":
+                    string title = _view.GetTaskTitle();
+                    _tasks.Add(new TaskItem { Id = _nextId++, Title = title });
+                    break;
+
+                case "status":
+                    var (id, statusIndex) = _view.GetStatusUpdate();
+                    var task = _tasks.Find(t => t.Id == id);
+                    if (task != null && Enum.IsDefined(typeof(Models.TaskStatus), statusIndex))
+                    {
+                        task.Status = (Models.TaskStatus)statusIndex;
+                    }
+                    break;
+            }
         }
     }
 }
